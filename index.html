@@ -39,149 +39,48 @@
 
     /* Cart Sidebar Transitions */
     #cart-sidebar.open #cart-overlay { opacity: 1; }
-    /* UPDATED: transform: translateY(0) */
     #cart-sidebar.open #cart-content { transform: translateY(0); }
     #cart-overlay { opacity: 0; transition: opacity 0.3s ease-in-out; }
     #cart-content { transition: transform 0.3s ease-in-out; }
 
-    /* ===== Floating LINE OA (ติดขอบข้างจอ) ===== */
-    .line-float-side {
-      position: fixed;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 9999;
+    /* New Animation: Soft Glow Behind */
+    @keyframes soft-glow {
+      0%, 100% { 
+        box-shadow: 0 0 0 0 rgba(6, 199, 85, 0); 
+      }
+      50% { 
+        box-shadow: 0 0 15px 4px rgba(6, 199, 85, 0.5); 
+      }
+    }
+    
+    .line-oa-icon {
+      border-radius: 20%; /* Rounded square shape standard for Line */
+      transition: transform 0.3s ease;
+      animation: soft-glow 3s infinite ease-in-out; /* Slow glow 3s */
+    }
+    .line-oa-icon:hover {
+        transform: scale(1.05);
     }
 
-    .line-float-btn {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      padding: 12px 14px;
+    /* Small Button in Text */
+    .line-text-btn {
+      background-color: #06c755;
+      color: white;
+      padding: 2px 8px;
       border-radius: 999px;
-      background: rgba(255, 255, 255, 0.92);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      box-shadow: 0 12px 30px rgba(0,0,0,0.18);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
+      font-size: 10px;
+      font-weight: bold;
       text-decoration: none;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      transition: background-color 0.2s;
+      vertical-align: middle;
+      margin: 0 2px;
     }
-
-    .line-float-btn:hover {
-      transform: scale(1.03);
-      box-shadow: 0 14px 38px rgba(0,0,0,0.22);
+    .line-text-btn:hover {
+      background-color: #05b54b;
     }
-
-    .line-float-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 999px;
-      display: grid;
-      place-items: center;
-      background: rgba(34, 197, 94, 0.12);
-      border: 1px solid rgba(34, 197, 94, 0.35);
-      font-size: 22px;
-      color: #16a34a;
-      flex: 0 0 auto;
-    }
-
-    .line-float-text {
-      display: flex;
-      flex-direction: column;
-      line-height: 1.05;
-      color: #111827;
-      white-space: nowrap;
-    }
-
-    .line-float-title {
-      font-weight: 800;
-      font-size: 12px;
-    }
-
-    .line-float-sub {
-      font-size: 11px;
-      color: #4b5563;
-      margin-top: 2px;
-    }
-
-    /* Bubble (มือถือ: แตะแล้วขึ้นป้าย 2 วิ) */
-    .line-oa-bubble {
-      position: absolute;
-      right: 56px; /* อยู่ซ้ายของปุ่ม */
-      top: 50%;
-      transform: translateY(-50%) scale(0.98);
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .18s ease, transform .18s ease;
-      background: rgba(255,255,255,0.96);
-      border: 1px solid rgba(16, 185, 129, 0.25);
-      box-shadow: 0 10px 26px rgba(0,0,0,0.16);
-      border-radius: 14px;
-      padding: 10px 12px;
-      min-width: 190px;
-      max-width: 230px;
-    }
-    .line-oa-bubble.show {
-      opacity: 1;
-      transform: translateY(-50%) scale(1);
-    }
-    .line-oa-bubble:after {
-      content: "";
-      position: absolute;
-      right: -8px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 0;
-      height: 0;
-      border-top: 8px solid transparent;
-      border-bottom: 8px solid transparent;
-      border-left: 8px solid rgba(255,255,255,0.96);
-      filter: drop-shadow(0 0 1px rgba(16,185,129,0.25));
-    }
-    .line-oa-bubble-title { font-weight: 800; font-size: 12px; color: #111827; }
-    .line-oa-bubble-sub { font-size: 11px; color: #4b5563; margin-top: 2px; line-height: 1.15; }
-    .line-oa-bubble-cta { font-size: 11px; color: #16a34a; font-weight: 700; margin-top: 6px; }
-
-    /* มือถือ: ไม่ให้ปุ่มใหญ่บังฟอร์ม -> เหลือไอคอนเล็ก + แตะแล้วขึ้นป้าย 2 วิ */
-    @media (max-width: 480px) {
-      .line-float-side {
-        right: 12px;
-        top: auto;
-        bottom: 120px; /* ลดการบัง input + เผื่อปุ่มตะกร้าด้านล่าง */
-        transform: none;
-      }
-
-      .line-float-btn {
-        gap: 0;
-        padding: 10px;
-        border-radius: 999px;
-      }
-
-      .line-float-text {
-        display: none; /* มือถือซ่อนข้อความยาว */
-      }
-
-      .line-float-icon {
-        width: 44px;
-        height: 44px;
-        font-size: 24px;
-      }
-
-      /* ซ่อน soft hint ใต้ปุ่มบนมือถือ */
-      #line-oa-float .line-soft-hint {
-        display: none;
-      }
-    }
-
-    /* ===== Edge-only Drag LINE OA (ลากได้แค่ขึ้น-ลงตามขอบ) ===== */
-#line-oa-float{
-  touch-action: none; /* กัน scroll ตอนลาก */
-}
-#line-oa-float.is-dragging{
-  user-select: none;
-  cursor: grabbing;
-}
   </style>
 </head>
 <body class="flex items-center justify-center min-h-screen p-4">
@@ -195,17 +94,29 @@
            alt="Verve Juice Logo" class="w-48" />
     </div>
 
-    <!-- Social -->
-    <div class="flex justify-center space-x-6 mb-6 text-2xl text-gray-800">
-      <a href="https://www.tiktok.com/@vervejuice.th" class="hover:text-emerald-600" target="_blank" aria-label="TikTok">
-        <i class="fa-brands fa-tiktok"></i>
-      </a>
-      <a href="https://www.instagram.com/vervejuice.th" class="hover:text-emerald-600" target="_blank" aria-label="Instagram">
-        <i class="fa-brands fa-instagram"></i>
-      </a>
+    <!-- Social Media Section (Updated) -->
+    <div class="flex flex-col items-center gap-4 mb-6">
+        <!-- Row 1: TikTok & IG -->
+        <div class="flex justify-center space-x-6 text-2xl text-gray-800">
+            <a href="https://www.tiktok.com/@vervejuice.th" class="hover:text-emerald-600 transition-colors" target="_blank" aria-label="TikTok">
+                <i class="fa-brands fa-tiktok"></i>
+            </a>
+            <a href="https://www.instagram.com/vervejuice.th" class="hover:text-emerald-600 transition-colors" target="_blank" aria-label="Instagram">
+                <i class="fa-brands fa-instagram"></i>
+            </a>
+        </div>
+        <!-- Row 2: Line OA (Official Icon + Glow Animation + Text) -->
+        <div class="flex flex-col items-center gap-1">
+            <a href="https://lin.ee/Z5hDNAQ" target="_blank" aria-label="Line" title="ทัก Line ร้าน">
+                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" 
+                     alt="Line OA" 
+                     class="w-7 h-7 line-oa-icon mx-auto">
+            </a>
+            <span class="font-bold text-xs text-gray-600">ติดตามโปรโมชั่น / สอบถาม / แก้ไขข้อมูล</span>
+        </div>
     </div>
 
-    <!-- NEW: Announcement Box -->
+    <!-- Announcement Box -->
     <div class="mb-6 p-4 bg-white/80 rounded-2xl border border-emerald-200 text-sm text-gray-800 space-y-3">
       <div>
         <p class="font-bold text-center text-emerald-700">📍 สถานที่จัดส่ง 📍</p>
@@ -245,13 +156,17 @@
                class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300" />
       </div>
 
-      <!-- NEW: เลือกสถานที่จัดส่งก่อน -->
+      <!-- UPDATED: เลือกสถานที่จัดส่งพร้อมปุ่ม Line OA -->
       <div>
         <label for="deliveryLocation" class="block text-gray-700 font-bold mb-2">เลือกสถานที่จัดส่ง*</label>
 
-            <p class="text-xs text-red-600 mt-1">
-                กรณีที่อยู่นอกพื้นที่จัดส่งสามารถทักมาสอบถามรายละเอียดได้ที่ Line OA ครับ
-            </p>
+        <div class="text-xs text-red-600 mt-1 mb-2 leading-relaxed">
+            กรณีที่อยู่นอกพื้นที่จัดส่งสามารถทักมาสอบถามรายละเอียดได้ที่ 
+            <a href="https://lin.ee/Z5hDNAQ" target="_blank" class="line-text-btn">
+                <i class="fa-brands fa-line"></i> ติดต่อสอบถาม
+            </a>
+            ครับ
+        </div>
 
         <select id="deliveryLocation"
                 class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300 bg-white">
@@ -418,35 +333,7 @@
   </button>
 </div>
 
-<!-- Floating LINE OA Button (แสดงทุกหน้า) -->
-<div id="line-oa-float" class="line-float-side" aria-label="LINE OA Floating Button">
-  <!-- bubble มือถือ (แตะแล้วขึ้น 2 วิ) -->
-  <div id="line-oa-bubble" class="line-oa-bubble" role="status" aria-live="polite">
-    <div class="line-oa-bubble-title">ทัก LINE ร้าน Verve Juice</div>
-    <div class="line-oa-bubble-sub">สอบถามได้ทุกเรื่อง • สั่งนอกพื้นที่ • เปลี่ยนรอบส่ง</div>
-    <div class="line-oa-bubble-cta">แตะอีกครั้งเพื่อเปิด LINE</div>
-  </div>
-
-  <a id="line-oa-link"
-     class="line-float-btn"
-     href="https://lin.ee/Z5hDNAQ"
-     target="_blank"
-     rel="noopener"
-     title="ทัก LINE ร้าน Verve Juice">
-    <div class="line-float-icon">
-      <i class="fa-brands fa-line"></i>
-    </div>
-    <div class="line-float-text">
-      <div class="line-float-title">ทัก LINE ร้าน</div>
-      <div class="line-float-sub">สอบถาม / สั่ง / เปลี่ยนรอบส่ง</div>
-    </div>
-  </a>
-
-  <!-- Soft hint (เดสก์ท็อปเห็น / มือถือซ่อน) -->
-  <div class="line-soft-hint mt-2 text-[11px] text-gray-500 text-center leading-snug">
-    * ถ้าอยู่นอกโซนจัดส่ง แนะนำทักมาก่อนชำระเงิน
-  </div>
-</div>
+<!-- REMOVED Floating LINE OA Section -->
 
 <script>
 window.getEl = id => document.getElementById(id);
@@ -618,145 +505,6 @@ renderCartSidebarContent = () => {
 };
 
 document.addEventListener('DOMContentLoaded', () => {
-  // ===== LINE OA: มือถือแตะแล้วขึ้นป้าย 2 วิ (แตะอีกทีถึงเปิด LINE) =====
-  const lineLink = getEl('line-oa-link');
-  const lineBubble = getEl('line-oa-bubble');
-  let bubbleTimer = null;
-  let armedToOpen = false;
-
-  const isMobile = () => window.matchMedia('(max-width: 480px)').matches;
-
-  const showLineBubble = () => {
-    if (!lineBubble) return;
-    lineBubble.classList.add('show');
-    armedToOpen = true;
-
-    clearTimeout(bubbleTimer);
-    bubbleTimer = setTimeout(() => {
-      lineBubble.classList.remove('show');
-      armedToOpen = false;
-    }, 2000);
-  };
-
-    // ===== Long-Press Edge Drag LINE OA (กดค้างก่อนถึงย้ายได้) =====
-const lineFloat = getEl('line-oa-float');
-
-if (lineFloat) {
-  lineFloat.style.right = 'auto';
-  lineFloat.style.bottom = 'auto';
-  lineFloat.style.top = 'auto';
-
-  const GAP = 8;
-  const LONG_PRESS_MS = 400; // เวลากดค้างก่อนเริ่มย้าย
-  const clamp = (v, min, max) => Math.min(max, Math.max(min, v));
-  const pickEdge = (x) => (x < window.innerWidth / 2 ? 'left' : 'right');
-
-  const applyEdgeY = (edge, y) => {
-    const rect = lineFloat.getBoundingClientRect();
-    const maxY = window.innerHeight - rect.height - GAP;
-    const top = clamp(y, GAP, maxY);
-    const left =
-      edge === 'left'
-        ? GAP
-        : window.innerWidth - rect.width - GAP;
-
-    lineFloat.style.left = `${left}px`;
-    lineFloat.style.top = `${top}px`;
-    return { edge, y: top };
-  };
-
-  // restore saved position
-  try {
-    const saved = JSON.parse(localStorage.getItem('lineOA_pos') || 'null');
-    if (saved?.edge) {
-      requestAnimationFrame(() => applyEdgeY(saved.edge, saved.y));
-    } else {
-      requestAnimationFrame(() =>
-        applyEdgeY('right', window.innerHeight - 180)
-      );
-    }
-  } catch {
-    requestAnimationFrame(() =>
-      applyEdgeY('right', window.innerHeight - 180)
-    );
-  }
-
-  let pressTimer = null;
-  let dragging = false;
-  let startY = 0;
-  let baseTop = 0;
-  let edge = 'right';
-
-  lineFloat.addEventListener('pointerdown', (e) => {
-    dragging = false;
-    startY = e.clientY;
-    baseTop = lineFloat.getBoundingClientRect().top;
-    edge = pickEdge(e.clientX);
-
-    // 👉 เริ่มนับ long-press
-    pressTimer = setTimeout(() => {
-      dragging = true;
-      lineFloat.classList.add('is-dragging');
-      lineFloat.setPointerCapture?.(e.pointerId);
-    }, LONG_PRESS_MS);
-  });
-
-  window.addEventListener('pointermove', (e) => {
-    if (!dragging) return;
-
-    e.preventDefault();
-    const dy = e.clientY - startY;
-    applyEdgeY(edge, baseTop + dy);
-  }, { passive: false });
-
-  window.addEventListener('pointerup', () => {
-    clearTimeout(pressTimer);
-
-    if (dragging) {
-      const rect = lineFloat.getBoundingClientRect();
-      const finalEdge = pickEdge(rect.left + rect.width / 2);
-      const pos = applyEdgeY(finalEdge, rect.top);
-
-      localStorage.setItem(
-        'lineOA_pos',
-        JSON.stringify({ edge: pos.edge, y: pos.y })
-      );
-    }
-
-    dragging = false;
-    lineFloat.classList.remove('is-dragging');
-  });
-
-  window.addEventListener('resize', () => {
-    const rect = lineFloat.getBoundingClientRect();
-    const finalEdge = pickEdge(rect.left + rect.width / 2);
-    const pos = applyEdgeY(finalEdge, rect.top);
-    localStorage.setItem('lineOA_pos', JSON.stringify(pos));
-  });
-}
-
-  if (lineLink) {
-    lineLink.addEventListener('click', (e) => {
-      // Desktop: เปิด LINE ได้เลย
-      if (!isMobile()) return;
-
-      // กัน “ลาก” แล้วไป trigger bubble/เปิดลิงก์
-      const floatEl = getEl('line-oa-float');
-      if (floatEl && floatEl.classList.contains('is-dragging')) {
-        e.preventDefault();
-        return;
-      }
-
-      // Mobile: tap แรกโชว์ bubble 2 วิ + กันไม่ให้เด้งออกนอกเว็บ
-      if (!armedToOpen) {
-        e.preventDefault();
-        showLineBubble();
-        return;
-      }
-      // tap ซ้ำภายใน 2 วิ -> ให้เปิด LINE ได้ตามปกติ
-    }, { passive: false });
-  }
-
   // CONFIG: ตั้งค่าพื้นที่จัดส่ง + วันในสัปดาห์ที่สามารถไปส่งได้
   // getDay() ของ JS: 0=อาทิตย์, 1=จันทร์, 2=อังคาร, 3=พุธ, 4=พฤหัส, 5=ศุกร์, 6=เสาร์
   const deliveryConfig = {
@@ -1178,9 +926,3 @@ order.total = Math.max(0, subtotal - discountValue);
 </script>
 </body>
 </html>
-
-
-
-
-
-
