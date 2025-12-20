@@ -121,6 +121,7 @@
       <div>
         <p class="font-bold text-center text-emerald-700">📍 สถานที่จัดส่ง 📍</p>
         <p class="text-center">สาทร / ตึก Park Silom</p>
+        <p class="text-center">พระนคร / ตึกศาลาว่าการกรุงเทพมหานคร</p>
         <p class="text-center">ไทรน้อย / หมู่บ้านชวนชม</p>
         <p class="text-center text-xs text-gray-600">(อยู่นอกพื้นที่สามารถทักมาสอบถามได้ครับ)</p>
       </div>
@@ -172,6 +173,7 @@
                 class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300 bg-white">
           <option value="">-- กรุณาเลือกสถานที่จัดส่ง --</option>
           <option value="sathorn">สาทร / ตึก Park Silom</option>
+          <option value="PhraNakhon">พระนคร / ตึกศาลาว่าการกรุงเทพมหานคร</option>
           <option value="sainoi">ไทรน้อย / หมู่บ้านชวนชม</option>
         </select>
       </div>
@@ -185,7 +187,7 @@
       </div>
       <div>
         <label for="customerNote" class="block text-gray-700 font-bold mb-2">หมายเหตุ</label>
-        <textarea id="customerNote" placeholder="เช่น ส่งด้วย grab/lineman จากจุดนับรับในโซนสาทร/ไทรน้อย"
+        <textarea id="customerNote" placeholder="เช่น ส่งด้วย grab/lineman จากจุดนับรับ ตึก Park Silom"
                   class="w-full px-4 py-2 border rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-300 resize-none h-24"></textarea>
       </div>
     </div>
@@ -511,6 +513,10 @@ document.addEventListener('DOMContentLoaded', () => {
     sathorn: {
       label: 'สาทร / ตึก Park Silom',
       weekdays: [1, 2, 3] // จันทร์-พุธ
+    },
+    PhraNakhon: {
+      label: 'พระนคร / ตึกศาลาว่าการกรุงเทพมหานคร',
+      weekdays: [1, 2, 3, 4, 5] // จันทร์-ศุกร์
     },
     sainoi: {
       label: 'ไทรน้อย / หมู่บ้านชวนชม',
@@ -926,5 +932,3 @@ order.total = Math.max(0, subtotal - discountValue);
 </script>
 </body>
 </html>
-
-
