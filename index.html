@@ -43,23 +43,37 @@
     #cart-overlay { opacity: 0; transition: opacity 0.3s ease-in-out; }
     #cart-content { transition: transform 0.3s ease-in-out; }
 
-    /* New Animation: Soft Glow Behind */
-    @keyframes soft-glow {
-      0%, 100% { 
-        box-shadow: 0 0 0 0 rgba(6, 199, 85, 0); 
-      }
+    /* --- Social Media Glow Animations --- */
+
+    /* Line: Soft Green Glow (Box Shadow for Image) */
+    @keyframes line-glow-anim {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(6, 199, 85, 0); }
+      50% { box-shadow: 0 0 15px 4px rgba(6, 199, 85, 0.6); }
+    }
+    .line-icon-glow {
+      animation: line-glow-anim 2s infinite ease-in-out;
+      border-radius: 20%;
+    }
+
+    /* TikTok: Red/Cyan Glitch Glow (Drop Shadow for Icon) */
+    @keyframes tiktok-glow-anim {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
       50% { 
-        box-shadow: 0 0 15px 4px rgba(6, 199, 85, 0.5); 
+        filter: drop-shadow(2px 2px 4px rgba(238, 29, 82, 0.5)) 
+                drop-shadow(-2px -2px 4px rgba(0, 242, 234, 0.5)); 
       }
     }
-    
-    .line-oa-icon {
-      border-radius: 20%; /* Rounded square shape standard for Line */
-      transition: transform 0.3s ease;
-      animation: soft-glow 3s infinite ease-in-out; /* Slow glow 3s */
+    .tiktok-icon-glow {
+      animation: tiktok-glow-anim 2s infinite ease-in-out;
     }
-    .line-oa-icon:hover {
-        transform: scale(1.05);
+
+    /* Instagram: Magenta/Purple Glow (Drop Shadow for Icon) */
+    @keyframes ig-glow-anim {
+      0%, 100% { filter: drop-shadow(0 0 0 rgba(0,0,0,0)); }
+      50% { filter: drop-shadow(0 0 8px rgba(193, 53, 132, 0.6)); }
+    }
+    .ig-icon-glow {
+      animation: ig-glow-anim 2s infinite ease-in-out;
     }
 
     /* Small Button in Text */
@@ -94,27 +108,35 @@
            alt="Verve Juice Logo" class="w-48" />
     </div>
 
-    <!-- Social Media Section (Updated) -->
-    <div class="flex flex-col items-center gap-4 mb-6">
-        <!-- Row 1: TikTok & IG -->
-        <div class="flex justify-center space-x-6 text-2xl text-gray-800">
-            <a href="https://www.tiktok.com/@vervejuice.th" class="hover:text-emerald-600 transition-colors" target="_blank" aria-label="TikTok">
-                <i class="fa-brands fa-tiktok"></i>
-            </a>
-            <a href="https://www.instagram.com/vervejuice.th" class="hover:text-emerald-600 transition-colors" target="_blank" aria-label="Instagram">
-                <i class="fa-brands fa-instagram"></i>
-            </a>
-            <span class="font-bold text-xs text-black-600">@vervejuice.th</span>
-        </div>
-        <!-- Row 2: Line OA (Official Icon + Glow Animation + Text) -->
-        <div class="flex flex-col items-center gap-1">
-            <a href="https://lin.ee/Z5hDNAQ" target="_blank" aria-label="Line" title="กดเพื่อติดต่อสอบถาม">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" 
-                     alt="Line OA" 
-                     class="w-7 h-7 line-oa-icon mx-auto">
-            </a>
-            <span class="font-bold text-xs text-emerald-600">ติดตามโปรโมชั่น / สอบถาม / แก้ไขข้อมูล</span>
-        </div>
+    <!-- Social Media Section (Vertical Stack, No Frames, With Unique Glows) -->
+    <div class="flex flex-col items-center gap-3 mb-6 w-full">
+        
+        <!-- TikTok (Red/Cyan Glow) -->
+        <a href="https://www.tiktok.com/@vervejuice.th" target="_blank" 
+           class="flex items-center gap-3 hover:text-emerald-700 transition-colors text-gray-800 no-underline">
+            <i class="fa-brands fa-tiktok text-2xl tiktok-icon-glow"></i>
+            <span class="font-bold text-xs">@vervejuice.th</span>
+        </a>
+
+        <!-- Instagram (Magenta Glow) -->
+        <a href="https://www.instagram.com/vervejuice.th" target="_blank" 
+           class="flex items-center gap-3 hover:text-emerald-700 transition-colors text-gray-800 no-underline">
+            <i class="fa-brands fa-instagram text-2xl ig-icon-glow"></i>
+            <span class="font-bold text-xs">@vervejuice.th</span>
+        </a>
+
+        <!-- Line OA (Green Glow) -->
+        <a href="https://lin.ee/Z5hDNAQ" target="_blank" 
+           class="flex items-center gap-3 group mt-1 no-underline">
+            <!-- Official Line Icon with Glow -->
+            <img src="https://upload.wikimedia.org/wikipedia/commons/4/41/LINE_logo.svg" 
+                 alt="Line OA" 
+                 class="w-7 h-7 line-icon-glow">
+            <span class="font-bold text-xs text-gray-800 group-hover:text-emerald-700 transition-colors">
+                ติดตามโปรโมชั่น / สอบถาม / แก้ไขข้อมูล
+            </span>
+        </a>
+
     </div>
 
     <!-- Announcement Box -->
