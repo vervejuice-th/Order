@@ -471,6 +471,13 @@ let menu = [];
 let updateTotal = () => {};
 let renderCartSidebarContent = () => {};
 
+// --- UTILS ---
+const scrollToTop = () => {
+    window.scrollTo(0, 0);
+    document.body.scrollTop = 0; // For Safari
+    document.documentElement.scrollTop = 0; // For Chrome, Firefox, IE and Opera
+};
+
 // Helper for animations
 const animateModalOpen = () => {
     getEl('modal-overlay').classList.remove('opacity-0');
@@ -1000,7 +1007,9 @@ document.addEventListener('DOMContentLoaded', () => {
     orderFormSection.classList.add('hidden');
     paymentSection.classList.remove('hidden');
     floatingCartBtnEl.classList.add('hidden');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    
+    // --- UPDATED: Force Scroll to Top ---
+    scrollToTop();
   });
 
   backToMenuBtn.addEventListener('click', () => {
@@ -1072,7 +1081,10 @@ document.addEventListener('DOMContentLoaded', () => {
       paymentSection.classList.add('hidden');
       confirmationSection.classList.remove('hidden');
       floatingCartBtnEl.classList.add('hidden');
-      window.scrollTo(0,0);
+      
+      // --- UPDATED: Force Scroll to Top ---
+      scrollToTop();
+      
     } catch(err){
       console.error(err);
       showMessageBox('ส่งข้อมูลไม่สำเร็จ กรุณาลองใหม่','red');
@@ -1097,20 +1109,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  // FIXED: Robust Copy to Clipboard function
   copyAccountBtn.addEventListener('click', () => {
     const account = getEl('bank-account-number').textContent.replace(/-/g, '');
-    
-    // Create temporary textarea
     const textArea = document.createElement("textarea");
     textArea.value = account;
-    
-    // Make it invisible but part of DOM to satisfy focus requirements
     textArea.style.position = "fixed"; 
     textArea.style.left = "-9999px";
     textArea.style.top = "0";
     document.body.appendChild(textArea);
-    
     textArea.focus();
     textArea.select();
     
@@ -1119,7 +1125,6 @@ document.addEventListener('DOMContentLoaded', () => {
       if (successful) {
         showMessageBox('คัดลอกเลขบัญชีแล้ว', 'green');
       } else {
-        // Fallback
         navigator.clipboard.writeText(account).then(() => {
            showMessageBox('คัดลอกเลขบัญชีแล้ว', 'green');
         }).catch(() => {
@@ -1130,7 +1135,6 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Copy failed', err);
       showMessageBox('คัดลอกไม่สำเร็จ', 'red');
     }
-    
     document.body.removeChild(textArea);
   });
 
