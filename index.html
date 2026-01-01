@@ -13,13 +13,23 @@
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap');
 
+    /* Reset & Base */
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden; /* ป้องกันเลื่อนซ้ายขวา */
+    }
+
     body {
       font-family: 'Noto Sans Thai', sans-serif;
-      /* พื้นหลังแบบไล่สีสดใสและมี Animation เคลื่อนไหวเบาๆ */
+      /* พื้นหลังแบบไล่สีสดใสและมี Animation */
       background: linear-gradient(135deg, #34d399 0%, #facc15 50%, #fb923c 100%);
       background-size: 200% 200%;
+      background-attachment: fixed; /* Fix พื้นหลังให้นิ่งเวลาเลื่อน */
       animation: gradientShift 15s ease infinite;
       -webkit-tap-highlight-color: transparent;
+      -webkit-overflow-scrolling: touch; /* ลื่นปรื๊ดบน iOS */
     }
 
     @keyframes gradientShift {
@@ -29,24 +39,29 @@
 
     .cute-font { font-family: 'Kanit', sans-serif; }
     
-    /* Glassmorphism Card Style */
+    /* Main Container Glass Effect - ปรับให้เสถียรขึ้น */
     .glass-card {
-      background: rgba(255, 255, 255, 0.92);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      background: rgba(255, 255, 255, 0.95); /* เพิ่มความทึบเล็กน้อยลดภาระการ render */
+      backdrop-filter: blur(10px); /* ลด blur ลงนิดนึง */
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.8);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      /* Hardware Acceleration Tricks */
+      transform: translateZ(0); 
+      -webkit-transform: translateZ(0);
+      will-change: transform; 
+      position: relative;
+      z-index: 10;
     }
 
-    /* Modern Card Hover Effects */
+    /* Menu Card Hover */
     .menu-card {
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.2s;
       border: 1px solid rgba(0,0,0,0.05);
-    }
-    .menu-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-      border-color: #10b981;
+      background: #ffffff;
+      /* Fix การกระพริบ */
+      transform: translate3d(0,0,0);
+      backface-visibility: hidden; 
     }
     .menu-card:active { transform: scale(0.98); }
 
@@ -55,14 +70,13 @@
       background: linear-gradient(135deg, #10b981 0%, #059669 100%);
       transition: all 0.3s ease;
     }
-    .btn-primary:hover {
-      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.4);
-      transform: translateY(-1px);
-    }
     .btn-primary:active { transform: translateY(1px); }
 
     /* Animations */
-    .floating-logo { animation: float 6s ease-in-out infinite; }
+    .floating-logo { 
+        animation: float 6s ease-in-out infinite;
+        will-change: transform; /* บอก browser ว่าตัวนี้จะขยับ */
+    }
     @keyframes float {
       0%, 100% { transform: translateY(0px); }
       50% { transform: translateY(-10px); }
@@ -81,13 +95,12 @@
     ::-webkit-scrollbar { width: 6px; }
     ::-webkit-scrollbar-track { background: transparent; }
     ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 10px; }
-    ::-webkit-scrollbar-thumb:hover { background: #9ca3af; }
 
     /* Form Inputs */
     .input-modern {
       background-color: #f9fafb;
       border: 1px solid #e5e7eb;
-      transition: all 0.2s;
+      appearance: none; /* ลบสไตล์ default ของ iOS */
     }
     .input-modern:focus {
       background-color: #fff;
@@ -106,44 +119,67 @@
     .tiktok-icon-glow { filter: drop-shadow(2px 2px 0px rgba(0,242,234,0.4)) drop-shadow(-2px -2px 0px rgba(255,0,80,0.4)); }
     .ig-icon-glow { filter: drop-shadow(0 2px 4px rgba(131,58,180,0.3)); }
 
-    /* Best Seller Badge Animation */
+    /* Best Seller Badge */
     @keyframes shine {
         0% { transform: translateX(-100%) rotate(45deg); }
         100% { transform: translateX(100%) rotate(45deg); }
     }
-    .badge-shine {
-        position: relative;
-        overflow: hidden;
-    }
+    .badge-shine { position: relative; overflow: hidden; }
     .badge-shine::after {
         content: '';
         position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        top: 0; left: 0; width: 100%; height: 100%;
         background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
         animation: shine 2s infinite;
     }
 
+    /* Important Fix for Announcement Box Disappearing */
+    .announcement-box-fix {
+        position: relative;
+        z-index: 20;
+        transform: translateZ(0); /* Force Hardware Accel */
+        -webkit-transform: translateZ(0);
+        background-color: #fff; /* ใส่สีพื้นหลังชัดเจนกันทะลุ */
+        /* ลบ overflow: hidden ที่อาจทำให้ content หาย */
+        overflow: visible !important; 
+    }
+    
+    /* Decorate elements inside announcement need explicit positioning */
+    .announce-decor-1 {
+        position: absolute; top: -10px; right: -10px; 
+        width: 80px; height: 80px; 
+        background: rgba(253, 186, 116, 0.3); /* orange-300 with opacity */
+        border-radius: 50%; filter: blur(20px); z-index: 0;
+    }
+    .announce-decor-2 {
+        position: absolute; bottom: -10px; left: -10px; 
+        width: 60px; height: 60px; 
+        background: rgba(253, 224, 71, 0.3); /* yellow-300 with opacity */
+        border-radius: 50%; filter: blur(20px); z-index: 0;
+    }
+    .announce-content {
+        position: relative; z-index: 10;
+    }
+
   </style>
 </head>
-<body class="flex items-start justify-center min-h-screen p-4 pt-6 pb-20">
+<body class="flex items-start justify-center min-h-screen p-3 pt-4 sm:p-6 pb-24">
 
-<div class="container glass-card p-4 sm:p-6 rounded-3xl w-full max-w-lg transition-all duration-300 relative z-10">
+<!-- Main Wrapper -->
+<div class="container glass-card p-4 sm:p-6 rounded-3xl w-full max-w-lg transition-all duration-300">
 
   <!-- ==================== MENU SECTION ==================== -->
   <div id="order-form-section">
     <!-- Header Logo -->
-    <div class="flex justify-center mb-8 floating-logo relative">
-        <div class="absolute inset-0 bg-white/40 blur-3xl rounded-full scale-125"></div>
+    <div class="flex justify-center mb-6 floating-logo relative">
+        <div class="absolute inset-0 bg-white/40 blur-3xl rounded-full scale-110"></div>
         <div class="relative z-10">
             <img src="https://github.com/kornkawes/VerveImage/blob/main/logo2.png?raw=true"
-                 alt="Verve Juice Logo" class="w-64 h-auto object-contain drop-shadow-xl" />
+                 alt="Verve Juice Logo" class="w-56 h-auto object-contain drop-shadow-md" />
         </div>
     </div>
 
-    <!-- Social Links -->
+    <!-- Social Links (Vertical Stack) -->
     <div class="flex flex-wrap justify-center gap-2 mb-6 w-full px-2">
         <a href="https://www.tiktok.com/@vervejuice.th" target="_blank" class="flex items-center gap-2 px-3 py-1.5 bg-black text-white rounded-full shadow-lg hover:-translate-y-1 transition-all text-xs font-bold no-underline">
             <i class="fa-brands fa-tiktok"></i> VerveJuice
@@ -156,14 +192,15 @@
         </a>
     </div>
 
-    <!-- Announcement Box -->
-    <div class="mb-6 mx-1 p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl border border-orange-200 text-sm text-gray-700 relative overflow-hidden shadow-inner group hover:shadow-md transition-shadow">
-      <div class="absolute -right-6 -top-6 bg-orange-300 w-24 h-24 rounded-full opacity-10 blur-xl group-hover:opacity-20 transition-opacity"></div>
-      <div class="absolute -left-6 -bottom-6 bg-yellow-300 w-20 h-20 rounded-full opacity-10 blur-xl"></div>
+    <!-- Announcement Box (FIXED) -->
+    <div class="announcement-box-fix mb-6 mx-1 p-4 bg-gradient-to-r from-orange-50 to-amber-50 rounded-2xl border border-orange-200 text-sm text-gray-700 shadow-sm">
+      <!-- Decorative Blobs (Background) -->
+      <div class="announce-decor-1"></div>
+      <div class="announce-decor-2"></div>
       
-      <div class="space-y-3 relative z-10">
+      <div class="space-y-3 announce-content">
         <div class="text-center">
-            <div class="inline-flex items-center gap-2 bg-white/80 px-3 py-1 rounded-full mb-2 shadow-sm backdrop-blur-sm border border-orange-100">
+            <div class="inline-flex items-center gap-2 bg-white/90 px-3 py-1 rounded-full mb-2 shadow-sm border border-orange-100">
                 <i class="fas fa-map-marker-alt text-orange-500 animate-bounce"></i>
                 <span class="font-bold text-orange-800 text-xs uppercase tracking-wide">พื้นที่จัดส่งหลัก</span>
             </div>
@@ -177,7 +214,7 @@
             </p>
         </div>
         <div class="h-px bg-orange-200 w-3/4 mx-auto opacity-50"></div>
-        <div class="flex items-start gap-3 bg-white/60 p-3 rounded-xl border border-orange-100">
+        <div class="flex items-start gap-3 bg-white/80 p-3 rounded-xl border border-orange-100">
              <div class="bg-orange-100 p-2 rounded-lg text-orange-600 flex-shrink-0">
                  <i class="fas fa-bullhorn"></i>
              </div>
@@ -250,7 +287,7 @@
         </div>
         <p id="delivery-warning" class="text-[10px] text-orange-500 mt-2 hidden"><i class="fas fa-exclamation-circle"></i> ทางร้านขอสงวนสิทธิ์เป็นฝ่ายเลือกวันในการจัดส่ง</p>
         
-        <!-- UPDATED: LINE BUTTON (MORE PROMINENT) -->
+        <!-- LINE BUTTON -->
         <div class="mt-3 flex justify-end">
              <a href="https://lin.ee/Z5hDNAQ" target="_blank" 
                 class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-emerald-200 rounded-full shadow-sm text-[11px] font-bold text-emerald-700 hover:bg-emerald-50 hover:text-emerald-800 transition-all no-underline transform hover:scale-105 group">
@@ -1114,5 +1151,3 @@ document.addEventListener('DOMContentLoaded', () => {
 </script>
 </body>
 </html>
-
-
