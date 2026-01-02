@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
   <!-- Google Fonts -->
   <style>
-    /* MODIFIED: Use Font Import from Index 8 */
     @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&family=Noto+Sans+Thai:wght@300;400;600;700&display=swap');
 
     :root {
@@ -377,7 +376,8 @@
                  <i class="fas fa-check text-5xl text-white drop-shadow-md"></i>
               </div>
           </div>
-          <h1 class="text-4xl font-bold cute-font text-slate-800 mb-3">ขอบคุณสำหรับคำสั่งซื้อ!</h1>
+          <!-- MODIFIED: Adjusted text size to text-3xl sm:text-4xl -->
+          <h1 class="text-3xl sm:text-4xl font-bold cute-font text-slate-800 mb-3 leading-tight">ขอบคุณสำหรับคำสั่งซื้อ!</h1>
           <p class="text-slate-500 mb-10 max-w-md mx-auto leading-relaxed">หลังจากตรวจสอบสลิปแล้ว<br>จะเริ่มจัดเตรียมคำสั่งซื้อให้ทันทีครับ</p>
           
           <div id="final-order-summary" class="bg-white p-8 rounded-[32px] shadow-xl shadow-emerald-50 border border-emerald-100/50 max-w-md mx-auto text-left mb-8 relative overflow-hidden">
@@ -391,11 +391,11 @@
 
   </div>
 
-  <!-- FLOATING CART BUTTON: MODIFIED to Light/Glass Theme (Index 7 Style) -->
-  <div id="floating-cart-btn" class="fixed bottom-6 left-0 right-0 z-40 px-6 hidden pointer-events-none">
+  <!-- FLOATING CART: Premium Design -->
+  <div id="floating-cart-btn" class="fixed bottom-6 left-0 right-0 z-50 px-4 hidden pointer-events-none fade-in-up">
     <button id="open-cart-popup-btn"
-            class="w-full max-w-sm mx-auto bg-white/95 backdrop-blur-md text-slate-800 p-4 rounded-2xl shadow-2xl shadow-emerald-900/10 flex items-center justify-between border border-white/50 pointer-events-auto transform transition-all hover:scale-[1.02] active:scale-95 ring-1 ring-white/50">
-            <!-- Content Injected via JS -->
+            class="w-full max-w-[380px] mx-auto bg-white/90 backdrop-blur-xl p-3 pl-3 pr-4 rounded-[20px] shadow-[0_8px_30px_rgb(0,0,0,0.04)] shadow-emerald-500/20 border border-white/60 pointer-events-auto transform transition-all duration-300 hover:scale-[1.02] active:scale-95 flex items-center justify-between group ring-1 ring-emerald-50">
+            <!-- Content injected via JS -->
     </button>
   </div>
 
@@ -637,26 +637,34 @@ window.confirmAdd = (id) => {
     showToast(`เพิ่ม ${item.name} แล้ว`, 'success');
 };
 
-// MODIFIED: White/Glass Theme for Floating Cart
 const renderFloatingCart = () => {
     const isPaymentPage = !getEl('payment-section').classList.contains('hidden');
+    
     if (order.totalItems > 0 && !isPaymentPage) {
+      floatingCartBtnEl.classList.remove('hidden');
+      
       openCartPopupBtnEl.innerHTML = `
-        <div class="flex items-center gap-3">
-            <div class="relative">
-                <span class="absolute -top-2 -right-2 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full shadow-sm">${order.totalItems}</span>
-                <i class="fas fa-shopping-basket text-2xl text-emerald-500"></i>
+        <div class="flex items-center gap-4">
+            <div class="relative w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white shadow-lg shadow-emerald-200 group-hover:rotate-6 transition-transform duration-500">
+                <i class="fas fa-shopping-basket text-lg"></i>
+                <span class="absolute -top-1.5 -right-1.5 bg-red-500 text-white text-[10px] font-bold w-5 h-5 flex items-center justify-center rounded-full border-2 border-white shadow-sm scale-110">${order.totalItems}</span>
             </div>
-            <div class="text-left">
-                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Total</p>
-                <p class="text-lg font-bold leading-none text-slate-800">฿${order.total.toFixed(0)}</p>
+            
+            <div class="text-left flex flex-col justify-center">
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-0.5">ยอดรวมของคุณ</p>
+                <div class="flex items-baseline gap-1">
+                    <p class="text-xl font-bold text-slate-800 leading-none cute-font tracking-wide">฿${order.total.toLocaleString()}</p>
+                </div>
             </div>
         </div>
-        <div class="flex items-center gap-2 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-100 text-emerald-700 shadow-sm">
-            <span class="text-xs font-bold">ดูตะกร้า</span>
-            <i class="fas fa-chevron-up text-xs"></i>
+
+        <div class="flex items-center gap-2 bg-slate-50 pl-4 pr-3 py-2 rounded-xl border border-slate-100 group-hover:bg-emerald-50 group-hover:border-emerald-100 transition-colors">
+            <span class="text-xs font-bold text-slate-600 group-hover:text-emerald-700">ดูตะกร้า</span>
+            <div class="w-5 h-5 rounded-full bg-white flex items-center justify-center shadow-sm text-slate-400 group-hover:text-emerald-500">
+                <i class="fas fa-chevron-right text-[10px]"></i>
+            </div>
         </div>`;
-      floatingCartBtnEl.classList.remove('hidden');
+        
     } else {
       floatingCartBtnEl.classList.add('hidden');
     }
@@ -760,14 +768,12 @@ function renderCartSidebar() {
     getEl('cart-sidebar-total').innerText = formatMoney(order.subtotal);
 }
 
-// MODIFIED: Attach event listener to new cart button
 getEl('open-cart-popup-btn').addEventListener('click', openCart);
 
 getEl('go-to-checkout').addEventListener('click', () => {
     closeCart();
     getEl('order-form-section').classList.add('hidden');
     getEl('payment-section').classList.remove('hidden');
-    // MODIFIED: Hide floating cart instead of dock
     floatingCartBtnEl.classList.add('hidden'); 
     renderCheckoutSummary();
     renderDeliveryDates(getEl('deliveryLocation').value);
