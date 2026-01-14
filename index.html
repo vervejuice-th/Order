@@ -461,6 +461,9 @@ const deliveryConfig = {
     sainoi: { label: 'ไทรน้อย / หมู่บ้านชวนชม', weekdays: [1, 2, 3, 4, 5] }
 };
 
+//(DD-MM-YYYY) ถ้ามีหลายวันให้ใส่ ["16-01-2026", "20-01-2026", "14-02-2026"]; ---
+const blockedDates = ["16-01-2026"]; 
+
 const DELIVERY_WEEKS_AHEAD = 1;
 const n8nWebhookUrl = "https://n8n-vervejuice-u61532.vm.elestio.app/webhook/3292a5c3-0f7f-424f-92f8-7dc42f51d763";
 
@@ -872,6 +875,12 @@ function renderDeliveryDates(locationKey) {
     const availableDateStrings = generateDeliveryDatesForLocation(locationKey);
     const validDates = availableDateStrings.filter(dateString => {
       const deliveryDate = new Date(dateString + 'T00:00:00');
+      
+      // --- ตรวจสอบวันหยุด ---
+      const [year, month, day] = dateString.split('-');
+      const formattedDateCheck = `${day}-${month}-${year}`; // แปลงเป็น DD-MM-YYYY
+      if (blockedDates.includes(formattedDateCheck)) return false; // ถ้าตรงกับวันหยุด ให้ซ่อน
+      
       return (deliveryDate.getTime() - now.getTime()) >= cutoffMs;
     });
 
