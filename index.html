@@ -987,44 +987,22 @@ getEl('upload-slip-btn').addEventListener('click', async () => {
     btn.disabled = true;
     text.classList.add('hidden');
     spinner.classList.remove('hidden');
-
-  // ค้นหาช่วงที่เตรียมส่งข้อมูล แล้ววางแบบนี้ค่ะ
-const orderData = getOrderData(); // ดึงข้อมูลออเดอร์เดิมที่มีอยู่
-
-// 1. จัดฟอร์แมตรายการสินค้า
-const formattedItems = orderData.items.map(item => 
-    `- ${item.name} (${item.size}) x ${item.quantity}` +
-    (item.allergies && item.allergies.length > 0 ? ` (แพ้: ${item.allergies.join(', ')})` : '')
-).join('\n');
-
-// 2. จัดฟอร์แมตวันที่ส่ง
-const formattedDeliveryDates = orderData.deliveryDates.map(date => 
-    new Date(date).toLocaleDateString('th-TH', { 
-        year: 'numeric', month: 'long', day: 'numeric' 
-    })
-).join(', ');
-
-// 3. รวมร่างข้อมูลส่งให้ Make
-const finalOrder = {
-    queueNumber: typeof getOrderQueueNumber === 'function' ? getOrderQueueNumber() : "N/A",
-    orderDate: new Date().toISOString(),
-    customerName: document.getElementById('name').value, // เช็ค ID ให้ตรงกับหน้าเว็บ
-    phone: document.getElementById('phone').value,       // เช็ค ID ให้ตรงกับหน้าเว็บ
-    items: formattedItems,
-    deliveryDates: formattedDeliveryDates,
-    deliveryLocationLabel: document.getElementById('location')?.value || '', // ปรับให้ตรงกับ ID จริง
-    customerNote: document.getElementById('note')?.value || '',
-    total: orderData.total,
-    totalItems: orderData.totalItems,
-    slipImage: window.currentSlipBase64 // ส่งโค้ดรูปภาพไปด้วย (ถ้ามี)
-};
-
-// 4. ส่งไปที่ Make Webhook
-fetch('ใส่_URL_Webhook_จาก_Make_ตรงนี้', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(finalOrder)
-})
+    
+    const finalOrder = {
+      queueNumber: getOrderQueueNumber(), 
+      customerName: name,
+      customerContact: { phone }, 
+      customerNote: getEl('customerNote').value.trim(),
+      deliveryLocationKey: loc,
+      deliveryLocationLabel: deliveryConfig[loc]?.label || '',
+      deliveryDates: dates, 
+      orderDate: new Date().toISOString(),
+      items: Object.values(order.items).filter(i=>i.quantity>0),
+      subtotal: order.subtotal, 
+      discount: order.discount, 
+      total: order.total, 
+      totalItems: order.totalItems
+    };
 
     const formData = new FormData();
     formData.append('slipImage', slip);
