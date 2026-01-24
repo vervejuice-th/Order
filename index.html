@@ -988,19 +988,27 @@ getEl('upload-slip-btn').addEventListener('click', async () => {
     text.classList.add('hidden');
     spinner.classList.remove('hidden');
     
+    const formattedItems = order.items.map(item => 
+      `- ${item.name} (${item.size}) x ${item.quantity}` +
+      (item.allergies && item.allergies.length > 0 ? ` (แพ้: ${item.allergies.join(', ')})` : '')
+    ).join('\n');
+
+    const formattedDeliveryDates = order.deliveryDates.map(date => 
+      new Date(date).toLocaleDateString('th-TH', { 
+        year: 'numeric', month: 'long', day: 'numeric' 
+      })
+    ).join(', ');
+
     const finalOrder = {
-      queueNumber: getOrderQueueNumber(), 
-      customerName: name,
-      customerContact: { phone }, 
-      customerNote: getEl('customerNote').value.trim(),
-      deliveryLocationKey: loc,
-      deliveryLocationLabel: deliveryConfig[loc]?.label || '',
-      deliveryDates: dates, 
+      queueNumber: getOrderQueueNumber(),
       orderDate: new Date().toISOString(),
-      items: Object.values(order.items).filter(i=>i.quantity>0),
-      subtotal: order.subtotal, 
-      discount: order.discount, 
-      total: order.total, 
+      customerName: document.getElementById('customer-name').value,
+      phone: document.getElementById('customer-phone').value, // แยกเบอร์ออกมาเลย
+      items: formattedItems,           // ส่งแบบจัดบรรทัดแล้ว
+      deliveryDates: formattedDeliveryDates, // ส่งแบบวันที่ไทยแล้ว
+      deliveryLocationLabel: document.getElementById('delivery-location').options[document.getElementById('delivery-location').selectedIndex].text,
+      customerNote: document.getElementById('customer-note').value,
+      total: order.total,
       totalItems: order.totalItems
     };
 
