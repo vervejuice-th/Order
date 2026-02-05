@@ -442,7 +442,7 @@ const formatMoney = num => `฿${num.toLocaleString()}`;
 const menuData = [
     { id:'The Glow', name:'The Glow', ingredients:'Pure Guava, Blush Bloom, Beet Love, Sweet Detox', properties:'รวมอาหารผิวตัวท็อปไว้ครบ ทั้งวิตามินซีสร้างคอลลาเจน, ไลโคปีนกันแดด, และเบต้าแคโรทีนลดริ้วรอย ทำงานร่วมกันเพื่อบูสต์ผิวจากภายในสู่ภายนอก', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/The%20Glow.png?raw=true', sizes: [{size:'250ml', price:349}], isNew: true },
     { id:'The Healer', name:'The Healer', ingredients:'Pure Guava, Hearty Green, Recharge Me, Blush Bloom', properties:'เน้นการลดการอักเสบ และเสริมสร้างเนื้อเยื่อใหม่ เหมาะมากสำหรับคนพักผ่อนน้อย ร่างกายช้ำ หรืออยู่ในช่วงพักฟื้น', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/The%20Healer.png?raw=true', sizes: [{size:'250ml', price:349}], isNew: true },
-    { id:'The Booster', name:'The Booster', ingredients:'Recharge Mw, Smart Sip, Beet Love, Apple Kiss', properties:'ใช้ความสดชื่นจากรสเปรี้ยวและความเผ็ดร้อนของสมุนไพรขิง กระตุ้นระบบประสาทให้ตื่นตัว โดยไม่ต้องพึ่งคาเฟอีน', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/The%20Booster.png?raw=true', sizes: [{size:'250ml', price:349}], isNew: true },
+    { id:'The Booster', name:'The Booster', ingredients:'Recharge Me, Smart Sip, Beet Love, Apple Kiss', properties:'ใช้ความสดชื่นจากรสเปรี้ยวและความเผ็ดร้อนของสมุนไพรขิง กระตุ้นระบบประสาทให้ตื่นตัว โดยไม่ต้องพึ่งคาเฟอีน', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/The%20Booster.png?raw=true', sizes: [{size:'250ml', price:349}], isNew: true },
     { id:'The Detox', name:'The Detox', ingredients:'Hearty Green, Sweet Detox, Apple Kiss, Smart Sip', properties:'เน้นการกวาดล้าง ของเสียตกค้างด้วยไฟเบอร์ และปรับสมดุลการทำงานของลำไส้ให้ขับถ่ายเป็นเวลา', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/The%20Detox.png?raw=true', sizes: [{size:'250ml', price:349}], isNew: true },
     { id:'apple-kiss', name:'Apple Kiss', ingredients:'แอปเปิ้ลเขียว, ขิง, มะนาว', properties:'ช่วยป้องกันผิวจากแสงแดด, ลดจุดด่างดำ', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/apple%20kiss.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
     { id:'blush-bloom', name:'Blush Bloom', ingredients:'มะเขือเทศ, สับปะรด, มะนาว', properties:'ช่วยผลัดเซลล์ผิวเก่าและลดริ้วรอย', imageUrl:'https://github.com/kornkawes/VerveImage/blob/main/blush%20bloom.jpg?raw=true', sizes: [{size:'250ml', price:89}, {size:'300ml', price:109}] },
@@ -491,8 +491,12 @@ function renderMenu() {
         const minPrice = item.sizes[0].price;
         const maxPrice = item.sizes[item.sizes.length-1].price;
         const priceDisplay = minPrice === maxPrice ? `฿${minPrice}` : `฿${minPrice} - ฿${maxPrice}`;
-        const badge = item.isBestSeller ? `<div class="absolute top-4 right-4 badge-shine bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg flex items-center gap-1.5 tracking-wider"><i class="fas fa-crown text-yellow-300"></i> BEST SELLER</div>` : '';
-        const badge = item.isNew ? `<div class="absolute top-4 right-4 badge-shine bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg flex items-center gap-1.5 tracking-wider"><i class="fas fa-crown text-yellow-300"></i> NEW</div>` : '';    
+        let badge = '';
+if (item.isBestSeller) {
+    badge = `<div class="absolute top-4 right-4 badge-shine bg-gradient-to-r from-rose-500 to-pink-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg flex items-center gap-1.5 tracking-wider"><i class="fas fa-crown text-yellow-300"></i> BEST SELLER</div>`;
+} else if (item.isNew) {
+    badge = `<div class="absolute top-4 right-4 badge-shine bg-gradient-to-r from-red-500 to-orange-500 text-white text-[10px] font-bold px-3 py-1.5 rounded-full z-10 shadow-lg flex items-center gap-1.5 tracking-wider"><i class="fas fa-crown text-yellow-300"></i> NEW</div>`;
+}    
       
         return `
         <div class="menu-item-modern group cursor-pointer fade-in-up" style="animation-delay: ${index * 0.1}s" onclick="openProductModal('${item.id}')">
