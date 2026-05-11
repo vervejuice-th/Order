@@ -212,8 +212,7 @@
                      <div>
                          <p class="font-bold text-slate-800 text-sm mb-1">ประกาศจากร้าน</p>
                          <p class="text-xs text-slate-600 leading-relaxed">
-                             ตอนนี้ Verve Juice มี <b>Line Official Account</b> แล้วน้า! 
-                             แอดเพื่อนเพื่อติดตามข่าวสารและโปรโมชั่นใหม่ๆได้เลยครับ 🎉
+                             ขอบคุณลูกค้าทุกท่านที่อุดหนุนนะครับ ไว้พบกันใหม่ครับ 🙏
                          </p>
                      </div>
                 </div>
@@ -459,10 +458,11 @@ const discountCodes = [
     { code:"SUCHATANDSOMPOP", type:"fixed", value:20, expiryDate:"2025-12-31", minSpend:0, minItems:3, maxDiscount:20 }
 ];
 
+//เพิ่มวัน 1, 2, 3-7 คือวันจันทร์-อาทิตย์ ---
 const deliveryConfig = {
-    sathorn: { label: 'สาทร / ตึก Park Silom', weekdays: [2, 3, 4] },
-    PhraNakhon: { label: 'พระนคร / ศาลาว่าการ กทม.', weekdays: [2, 3, 4] },
-    sainoi: { label: 'ไทรน้อย / หมู่บ้านชวนชม', weekdays: [1, 2, 3, 4, 5] }
+    sathorn: { label: 'สาทร / ตึก Park Silom', weekdays: [] },
+    PhraNakhon: { label: 'พระนคร / ศาลาว่าการ กทม.', weekdays: [,] },
+    sainoi: { label: 'ไทรน้อย / หมู่บ้านชวนชม', weekdays: [,] }
 };
 
 //(DD-MM-YYYY) ถ้ามีหลายวันให้ใส่ ["16-01-2026", "20-01-2026", "14-02-2026"]; ---
